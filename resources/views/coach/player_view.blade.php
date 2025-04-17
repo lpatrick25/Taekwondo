@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('player')
+@section('chapter')
     active
 @endsection
 @section('APP-CONTENT')

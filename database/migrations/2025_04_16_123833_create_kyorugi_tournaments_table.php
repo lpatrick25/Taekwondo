@@ -22,9 +22,14 @@ return new class extends Migration
             $table->date('registration_end');
             $table->string('venue_name')->nullable();
 
-            $table->string('province_code')->nullable();
-            $table->string('municipality_code')->nullable();
-            $table->string('brgy_code')->nullable();
+            $table->bigInteger('province_code')->unsigned();
+            $table->foreign('province_code')->references('province_code')->on('provinces')->onDelete('cascade');
+
+            $table->bigInteger('municipality_code')->unsigned();
+            $table->foreign('municipality_code')->references('municipality_code')->on('municipalities')->onDelete('cascade');
+
+            $table->bigInteger('brgy_code')->unsigned();
+            $table->foreign('brgy_code')->references('brgy_code')->on('brgys')->onDelete('cascade');
 
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
 

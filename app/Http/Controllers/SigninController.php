@@ -99,7 +99,7 @@ class SigninController extends Controller
                 return redirect()->route('coachDashboard');
             case UserType::PLAYER:
                 return redirect()->route('playerDashboard');
-            case UserType::TM:
+            case UserType::TOURNAMENT_MANAGER:
                 return redirect()->route('tmDashboard');
             case UserType::CHAIRMAN:
                 return redirect()->route('chairmanDashboard');
@@ -116,7 +116,7 @@ class SigninController extends Controller
                 return redirect()->route('coachProfile');
             case UserType::PLAYER:
                 return redirect()->route('playerProfile');
-            case UserType::TM:
+            case UserType::TOURNAMENT_MANAGER:
                 return redirect()->route('tmProfile');
             case UserType::CHAIRMAN:
                 return redirect()->route('chairmanProfile');

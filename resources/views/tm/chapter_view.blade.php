@@ -148,7 +148,7 @@
                                         </div>
                                         <div class="card-body text-center">
                                             <h5 class="card-title font-weight-bold mb-2">{{ $player->user->full_name }}</h5>
-                                            <a href="{{ url('/player/viewPlayer/' . $player->id) }}"
+                                            <a href="{{ url('/tm/viewPlayer/' . $player->id) }}"
                                                 class="btn btn-outline-primary btn-sm">View Profile</a>
                                         </div>
                                     </div>

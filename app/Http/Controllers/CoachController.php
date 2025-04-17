@@ -30,6 +30,12 @@ class CoachController extends Controller
         return view('coach.add_player', compact('provinces'));
     }
 
+    public function viewPlayer($playerID)
+    {
+        $player = Player::with('user')->findOrFail($playerID);
+        return view('coach.player_view', compact('player'));
+    }
+
     public function chapter()
     {
         $chapter = Chapter::where('coach_id',auth()->user()->id)->first();
@@ -41,7 +47,7 @@ class CoachController extends Controller
         $committee = auth()->user()->committee;
 
         if (!$committee) {
-            abort(404, 'Player not found.');
+            abort(404, 'Committee not found.');
         }
 
         return view('coach.profile', compact('committee'));

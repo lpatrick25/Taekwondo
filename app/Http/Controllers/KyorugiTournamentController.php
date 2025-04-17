@@ -2,64 +2,76 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\KyorugiTournamentStoreRequest;
+use App\Http\Requests\KyorugiTournamentUpdateRequest;
+use App\Models\EventCategory;
 use App\Models\KyorugiTournament;
-use Illuminate\Http\Request;
+use App\Models\Province;
+use Illuminate\Http\JsonResponse;
 
 class KyorugiTournamentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        return $this->respond(function () {
+            $tournaments = KyorugiTournament::with(['eventCategory', 'creator'])->get();
+            return $this->success($tournaments, 'Tournaments retrieved successfully.');
+        });
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(KyorugiTournamentStoreRequest $request): JsonResponse
     {
-        //
+        return $this->respond(function () use ($request) {
+            $validated = $request->validated();
+
+            $tournament = KyorugiTournament::create($validated);
+
+            if ($request->has('banner')) {
+                $tournament->addMedia($request->file('banner'))
+                    ->toMediaCollection('banner');
+            }
+
+            return $this->success($tournament, 'Tournament created successfully.', 201);
+        });
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show($id)
     {
-        //
+        $eventCategories = EventCategory::all();
+        $tournament = KyorugiTournament::findOrFail($id);
+        $provinces = Province::where('region_code', 8)->get();
+
+        return view('tm.edit_kyorugi', compact('tournament', 'eventCategories', 'provinces'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(KyorugiTournament $kyorugiTournament)
+    public function update(KyorugiTournamentUpdateRequest $request, $tournament_id): JsonResponse
     {
-        //
+        return $this->respond(function () use ($request, $tournament_id) {
+            $validated = $request->validated();
+
+            $tournament = KyorugiTournament::findOrFail($tournament_id);
+
+            if ($request->has('banner')) {
+                $tournament->addMedia($request->file('banner'))
+                    ->toMediaCollection('banner');
+            }
+
+            $tournament->update($validated);
+
+            // dd($tournament);
+
+            return $this->success($tournament, 'Tournament updated successfully.');
+        }, 'Tournament not found.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(KyorugiTournament $kyorugiTournament)
+    public function destroy($id): JsonResponse
     {
-        //
-    }
+        return $this->respond(function () use ($id) {
+            $tournament = KyorugiTournament::findOrFail($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, KyorugiTournament $kyorugiTournament)
-    {
-        //
-    }
+            $tournament->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(KyorugiTournament $kyorugiTournament)
-    {
-        //
+            return $this->success(null, 'Tournament deleted successfully.');
+        }, 'Tournament not found.');
     }
 }

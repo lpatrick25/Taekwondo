@@ -23,6 +23,7 @@ class AdminController extends Controller
         $provinces = Province::where('region_code', 8)->get();
         return view("admin.add_committee", compact("provinces"));
     }
+
     public function chapter()
     {
         $chapters = Chapter::with('user')->get();

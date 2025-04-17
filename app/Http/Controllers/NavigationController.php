@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chapter;
+use App\Models\Player;
 use Illuminate\Http\Request;
 
 class NavigationController extends Controller
@@ -23,6 +24,12 @@ class NavigationController extends Controller
         $chapter = Chapter::where('coach_id', $player->coach_id)->first();
 
         return view('player.chapter', compact('chapter'));
+    }
+
+    public function viewPlayer($playerID)
+    {
+        $player = Player::with('user')->findOrFail($playerID);
+        return view('coach.player_view', compact('player'));
     }
 
     public function playerProfile()

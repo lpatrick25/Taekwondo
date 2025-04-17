@@ -4,9 +4,12 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CoachController;
 use App\Http\Controllers\CommitteeController;
+use App\Http\Controllers\EventCategoryController;
+use App\Http\Controllers\KyorugiTournamentController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\SigninController;
+use App\Http\Controllers\TMController;
 use App\Models\Brgy;
 use App\Models\Municipality;
 use Illuminate\Http\Request;
@@ -61,6 +64,7 @@ Route::prefix('coach')->middleware('auth')->group(function () {
     // Player
     Route::get('player', [CoachController::class, 'player'])->name('player');
     Route::get('addPlayer', [CoachController::class, 'addPlayer'])->name('addPlayer');
+    Route::get('viewPlayer/{playerID}', [CoachController::class, 'viewPlayer'])->name('coachViewPlayer');
 
     Route::get('chapter', [CoachController::class, 'chapter'])->name('coachChapter');
 
@@ -71,8 +75,30 @@ Route::prefix('player')->middleware('auth')->group(function () {
     Route::get('dashboard', [NavigationController::class, 'dashboard'])->name('playerDashboard');
 
     Route::get('chapter', [NavigationController::class, 'chapter'])->name('playerChapter');
+    Route::get('viewPlayer/{playerID}', [NavigationController::class, 'viewPlayer'])->name('coachViewPlayer');
 
     Route::get('/playerProfile', [NavigationController::class, 'playerProfile'])->name('playerProfile');
+});
+
+Route::prefix('tm')->middleware('auth')->group(function () {
+    Route::get('dashboard', [TMController::class, 'dashboard'])->name('tmDashboard');
+
+    // Chapter
+    Route::get('chapter', [TMController::class, 'chapter'])->name('tmChapter');
+    Route::get('viewChapter/{chapterID}', [TMController::class, 'vieWChapter'])->name('tmViewChapter');
+
+    // Player
+    Route::get('player', [TMController::class, 'player'])->name('tmPlayer');
+    Route::get('viewPlayer/{playerID}', [TMController::class, 'viewPlayer'])->name('tmViewPlayer');
+
+    // Event Category
+    Route::get('category', [TMController::class, 'category'])->name('tmCategory');
+
+    // Kyorugi
+    Route::get('kyorugi', [TMController::class, 'kyorugi'])->name('tmKyorugi');
+    Route::get('addKyorugi', [TMController::class, 'addKyorugi'])->name('addKyorugi');
+
+    Route::get('/tmProfile', [TMController::class, 'tmProfile'])->name('tmProfile');
 });
 
 Route::get('/get-municipalities/{provinceCode}', function ($provinceCode) {
@@ -88,3 +114,5 @@ Route::get('/get-brgys/{municipalityCode}', function ($municipalityCode) {
 Route::resource('committees', CommitteeController::class)->middleware('auth');
 Route::resource('chapters', ChapterController::class)->middleware('auth');
 Route::resource('players', PlayerController::class)->middleware('auth');
+Route::resource('eventCategories', EventCategoryController::class)->middleware('auth');
+Route::resource('kyorugiTournaments', KyorugiTournamentController::class)->middleware('auth');

@@ -58,12 +58,20 @@
 @endsection
 @section('APP-CONTENT')
     <div class="row">
+        <div class="col-lg-12 mb-4">
+            <button type="button" class="btn btn-md btn-primary" onclick="goBack()">Go Back</button>
+            <script>
+                function goBack() {
+                    window.history.back();
+                }
+            </script>
+        </div>
         <div class="col-lg-4">
             <div class="card card-block p-card">
                 <div class="profile-box">
                     <div class="profile-card rounded">
-                        <img src="../assets/images/user/1.jpg" alt="profile-bg"
-                            class="avatar-100 rounded d-block mx-auto img-fluid mb-3">
+                        <img src="{{ $chapter->coach->getFirstMediaUrl('avatar', 'thumb') ?: asset('assets/images/user/1.jpg') }}"
+                            alt="profile-bg" class="avatar-100 rounded d-block mx-auto img-fluid mb-3">
                         <h3 class="font-600 text-white text-center mb-0">{{ $chapter->coach->full_name }}</h3>
                         <p class="text-white text-center mb-5">Coach</p>
                     </div>
@@ -119,20 +127,34 @@
                 </div>
                 <div class="card-body scrollable-content">
                     <div class="row">
-                        @foreach ($chapter->players as $player)
-                            <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                                <div class="card shadow-sm">
-                                    <img src="{{ $player->user->getFirstMediaUrl('avatar', 'thumb') ?: asset('assets/images/user/1.jpg') }}"
-                                        class="card-img-top rounded-top" alt="Player Avatar">
-                                    <div class="card-body text-center">
-                                        <h4 class="card-title">{{ $player->user->full_name }}</h4>
-                                        <p class="card-text">
-                                            {{ ucfirst(str_replace('_', ' ', $player->belt_level->value)) }}
-                                        </p>
-                                    </div>
+                        @if ($chapter->players->isEmpty())
+                            <div class="col-12 text-center alert alert-info shadow-sm rounded">
+                                <div class="py-5">
+                                    <h4 class="mb-3 font-weight-bold text-primary">No Players Found</h4>
+                                    <p class="mb-4 text-muted">It seems there are no players registered in this chapter yet. Please check back later or add new players to this chapter.</p>
                                 </div>
                             </div>
-                        @endforeach
+                        @else
+                            @foreach ($chapter->players as $player)
+                                <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                                    <div class="card shadow-sm border-0">
+                                        <div class="position-relative">
+                                            <img src="{{ $player->user->getFirstMediaUrl('avatar', 'thumb') ?: asset('assets/images/user/1.jpg') }}"
+                                                class="card-img-top rounded-top" alt="Player Avatar">
+                                            <div class="badge badge-primary position-absolute"
+                                                style="top: 10px; right: 10px;">
+                                                {{ ucfirst(str_replace('_', ' ', $player->belt_level->value)) }}
+                                            </div>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title font-weight-bold mb-2">{{ $player->user->full_name }}</h5>
+                                            <a href="{{ url('/coach/viewPlayer/' . $player->id) }}"
+                                                class="btn btn-outline-primary btn-sm">View Profile</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
             </div>

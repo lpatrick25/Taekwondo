@@ -47,6 +47,9 @@
             <div class="data-scrollbar" data-scroll="1">
                 @php
                     $userType = strtolower(auth()->user()->user_type->value);
+                    if ($userType == 'tournament manager') {
+                        $userType = 'tm';
+                    }
                 @endphp
 
                 @includeIf($userType . '.sidebar')

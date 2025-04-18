@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('kyorugi_tournament_player', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tournament_id')->constrained('kyorugi_tournaments')->onDelete('cascade');
-            $table->foreignId('player_id')->constrained('players')->onDelete('cascade');
+            $table->foreignId('player_id')->constrained('users')->onDelete('cascade');
 
             $table->string('division');
             $table->string('weight_class');

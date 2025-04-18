@@ -71,9 +71,9 @@
                     }, 1000);
                 },
                 error: function(response) {
-                    showDatumAlert('danger', xhr.responseJSON?.message ||
+                    showDatumAlert('danger', response.responseJSON?.message ||
                         'Unexpected server error.');
-                    console.error('Full error:', xhr.responseJSON);
+                    console.error('Full error:', response.responseJSON);
                 }
             });
         }

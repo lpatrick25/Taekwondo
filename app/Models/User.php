@@ -34,26 +34,44 @@ class User extends Authenticatable implements HasMedia
         'user_type' => UserType::class,
     ];
 
-    public function player(): HasOne
-    {
-        return $this->hasOne(Player::class);
-    }
-
-    public function committee(): HasOne
+    public function committee()
     {
         return $this->hasOne(Committee::class);
     }
 
-    // For coach owning a chapter
-    public function chapter(): HasOne
+    public function player()
+    {
+        return $this->hasOne(Player::class);
+    }
+
+    public function chapter()
     {
         return $this->hasOne(Chapter::class, 'coach_id');
     }
 
-    // For coach having multiple players
-    public function players(): HasMany
+    public function kyorugiTournaments()
     {
-        return $this->hasMany(Player::class, 'coach_id');
+        return $this->hasMany(KyorugiTournament::class, 'created_by');
+    }
+
+    public function registeredTournaments()
+    {
+        return $this->hasMany(KyorugiTournamentPlayer::class, 'registered_by');
+    }
+
+    public function redMatches()
+    {
+        return $this->hasMany(KyorugiTournamentMatch::class, 'player_red_id');
+    }
+
+    public function blueMatches()
+    {
+        return $this->hasMany(KyorugiTournamentMatch::class, 'player_blue_id');
+    }
+
+    public function wonMatches()
+    {
+        return $this->hasMany(KyorugiTournamentMatch::class, 'winner_id');
     }
 
     public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void

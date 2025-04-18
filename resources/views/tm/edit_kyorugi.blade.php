@@ -3,6 +3,14 @@
     active
 @endsection
 @section(section: 'APP-CONTENT')
+    <div class="mb-4">
+        <button type="button" class="btn btn-md btn-primary" onclick="goBack()">Go Back</button>
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+    </div>
     <form id="updateForm" class="card-content needs-validation" novalidate data-id="{{ $tournament->id }}">
         <div class="card">
             <div class="card-header d-flex justify-content-between">

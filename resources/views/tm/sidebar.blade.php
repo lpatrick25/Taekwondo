@@ -50,7 +50,7 @@
             </a>
         </li>
         <li class="px-3 pt-3 pb-2">
-            <span class="text-uppercase small font-weight-bold">Tournament</span>
+            <span class="text-uppercase small font-weight-bold">Kyorogi</span>
         </li>
         <li class="sidebar-layout @yield(section: 'kyorugi')">
             <a href="{{ route('tmKyorugi') }}" class="svg-icon">
@@ -60,7 +60,18 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                </i><span class="ml-2">Kyorogi</span>
+                </i><span class="ml-2">Tournament</span>
+            </a>
+        </li>
+        <li class="sidebar-layout @yield(section: 'kyorugiPlayer')">
+            <a href="{{ route('tmKyorugiPlayer') }}" class="svg-icon">
+                <i class="">
+                    <svg class="svg-icon" id="iq-user-1-1" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </i><span class="ml-2">Kyorugi Player</span>
             </a>
         </li>
     </ul>

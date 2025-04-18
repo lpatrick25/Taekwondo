@@ -6,6 +6,7 @@ use App\Http\Controllers\CoachController;
 use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\KyorugiTournamentController;
+use App\Http\Controllers\KyorugiTournamentPlayerController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\SigninController;
@@ -68,6 +69,10 @@ Route::prefix('coach')->middleware('auth')->group(function () {
 
     Route::get('chapter', [CoachController::class, 'chapter'])->name('coachChapter');
 
+    // Kyorugi
+    Route::get('kyorugi', [CoachController::class, 'kyorugi'])->name('coachKyorugi');
+    Route::get('kyorugiPlayer/{tournamentID}', [CoachController::class, 'kyorugiPlayer'])->name('coachKyorugiPlayer');
+
     Route::get('/coachProfile', [CoachController::class, 'coachProfile'])->name('coachProfile');
 });
 
@@ -75,7 +80,7 @@ Route::prefix('player')->middleware('auth')->group(function () {
     Route::get('dashboard', [NavigationController::class, 'dashboard'])->name('playerDashboard');
 
     Route::get('chapter', [NavigationController::class, 'chapter'])->name('playerChapter');
-    Route::get('viewPlayer/{playerID}', [NavigationController::class, 'viewPlayer'])->name('coachViewPlayer');
+    Route::get('viewPlayer/{playerID}', [NavigationController::class, 'viewPlayer'])->name('playerViewPlayer');
 
     Route::get('/playerProfile', [NavigationController::class, 'playerProfile'])->name('playerProfile');
 });
@@ -97,6 +102,7 @@ Route::prefix('tm')->middleware('auth')->group(function () {
     // Kyorugi
     Route::get('kyorugi', [TMController::class, 'kyorugi'])->name('tmKyorugi');
     Route::get('addKyorugi', [TMController::class, 'addKyorugi'])->name('addKyorugi');
+    Route::get('kyorugiPlayer', [TMController::class, 'kyorugiPlayer'])->name('tmKyorugiPlayer');
 
     Route::get('/tmProfile', [TMController::class, 'tmProfile'])->name('tmProfile');
 });
@@ -116,3 +122,4 @@ Route::resource('chapters', ChapterController::class)->middleware('auth');
 Route::resource('players', PlayerController::class)->middleware('auth');
 Route::resource('eventCategories', EventCategoryController::class)->middleware('auth');
 Route::resource('kyorugiTournaments', KyorugiTournamentController::class)->middleware('auth');
+Route::resource('kyorugiTournamentPlayers', KyorugiTournamentPlayerController::class)->middleware('auth');

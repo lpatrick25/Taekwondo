@@ -23,9 +23,9 @@ class Chapter extends Model
         'brgy_code'
     ];
 
-    public function user(): BelongsTo
+    public function coach()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'coach_id');
     }
 
     public function province()
@@ -38,7 +38,7 @@ class Chapter extends Model
         return $this->belongsTo(Municipality::class, 'municipality_code', 'municipality_code');
     }
 
-    public function brgy()
+    public function barangay()
     {
         return $this->belongsTo(Brgy::class, 'brgy_code', 'brgy_code');
     }
@@ -46,10 +46,5 @@ class Chapter extends Model
     public function players()
     {
         return $this->hasMany(Player::class);
-    }
-
-    public function coach(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'coach_id');
     }
 }

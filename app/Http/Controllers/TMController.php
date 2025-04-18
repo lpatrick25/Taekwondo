@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chapter;
 use App\Models\EventCategory;
 use App\Models\KyorugiTournament;
+use App\Models\KyorugiTournamentPlayer;
 use App\Models\Player;
 use App\Models\Province;
 use Illuminate\Http\Request;
@@ -18,13 +19,13 @@ class TMController extends Controller
 
     public function chapter()
     {
-        $chapters = Chapter::with('user')->get();
+        $chapters = Chapter::all();
         return view("tm.chapter", compact("chapters"));
     }
 
     public function viewChapter(int $chapterID)
     {
-        $chapter = Chapter::with('user')->findOrFail($chapterID);
+        $chapter = Chapter::findOrFail($chapterID);
         return view("tm.chapter_view", compact("chapter"));
     }
 
@@ -59,6 +60,12 @@ class TMController extends Controller
         $provinces = Province::where('region_code', 8)->get();
 
         return view('tm.add_kyorugi', compact('provinces', 'eventCategories'));
+    }
+
+    public function kyorugiPlayer()
+    {
+        $kyorugis = KyorugiTournamentPlayer::all();
+        return view('tm.kyorugi_player', compact('kyorugis'));
     }
 
     public function tmProfile()

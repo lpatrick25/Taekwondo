@@ -38,9 +38,26 @@ class Player extends Model
         'religion' => Religion::class,
     ];
 
-    public function user(): BelongsTo
+    public function tournaments()
+    {
+        return $this->belongsToMany(KyorugiTournament::class, 'kyorugi_tournament_player', 'player_id', 'tournament_id')
+            ->withPivot(['weight_class', 'belt_level', 'status', 'registered_by'])
+            ->withTimestamps();
+    }
+
+    public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function coach()
+    {
+        return $this->belongsTo(User::class, 'coach_id');
+    }
+
+    public function chapter()
+    {
+        return $this->belongsTo(Chapter::class);
     }
 
     public function province()
@@ -53,25 +70,13 @@ class Player extends Model
         return $this->belongsTo(Municipality::class, 'municipality_code', 'municipality_code');
     }
 
-    public function brgy()
+    public function barangay()
     {
         return $this->belongsTo(Brgy::class, 'brgy_code', 'brgy_code');
     }
 
-    public function coach(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'coach_id');
-    }
-
-    public function chapter(): BelongsTo
-    {
-        return $this->belongsTo(Chapter::class);
-    }
-
-    public function tournaments()
-    {
-        return $this->belongsToMany(KyorugiTournament::class, 'kyorugi_tournament_player', 'player_id', 'tournament_id')
-            ->withPivot(['weight_class', 'belt_level', 'status', 'registered_by'])
-            ->withTimestamps();
-    }
+    // public function tournaments()
+    // {
+    //     return $this->hasMany(KyorugiTournamentPlayer::class);
+    // }
 }

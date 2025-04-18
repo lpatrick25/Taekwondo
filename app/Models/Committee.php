@@ -36,7 +36,7 @@ class Committee extends Model
         'religion' => Religion::class,
     ];
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
@@ -51,7 +51,7 @@ class Committee extends Model
         return $this->belongsTo(Municipality::class, 'municipality_code', 'municipality_code');
     }
 
-    public function brgy()
+    public function barangay()
     {
         return $this->belongsTo(Brgy::class, 'brgy_code', 'brgy_code');
     }

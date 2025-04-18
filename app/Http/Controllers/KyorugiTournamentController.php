@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TournamentStatus;
 use App\Http\Requests\KyorugiTournamentStoreRequest;
 use App\Http\Requests\KyorugiTournamentUpdateRequest;
 use App\Models\EventCategory;
@@ -69,9 +70,12 @@ class KyorugiTournamentController extends Controller
         return $this->respond(function () use ($id) {
             $tournament = KyorugiTournament::findOrFail($id);
 
-            $tournament->delete();
+            if ($tournament->status == TournamentStatus::DRAFT) {
+                $tournament->delete();
+                return $this->success(null, 'Tournament deleted successfully.');
+            }
 
-            return $this->success(null, 'Tournament deleted successfully.');
+            return $this->fail('You cannot delete a tournament that is not in draft status.');
         }, 'Tournament not found.');
     }
 }

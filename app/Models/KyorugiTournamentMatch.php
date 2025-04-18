@@ -31,11 +31,6 @@ class KyorugiTournamentMatch extends Model
         'player2',
     ];
 
-    public function tournament(): BelongsTo
-    {
-        return $this->belongsTo(KyorugiTournament::class);
-    }
-
     public function player1(): BelongsTo
     {
         return $this->belongsTo(Player::class, 'player1_id');
@@ -46,11 +41,6 @@ class KyorugiTournamentMatch extends Model
         return $this->belongsTo(Player::class, 'player2_id');
     }
 
-    public function winner(): BelongsTo
-    {
-        return $this->belongsTo(Player::class, 'winner_id');
-    }
-
     public function loser(): BelongsTo
     {
         return $this->belongsTo(Player::class, 'loser_id');
@@ -59,5 +49,25 @@ class KyorugiTournamentMatch extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function tournament()
+    {
+        return $this->belongsTo(KyorugiTournament::class);
+    }
+
+    public function redPlayer()
+    {
+        return $this->belongsTo(User::class, 'player_red_id');
+    }
+
+    public function bluePlayer()
+    {
+        return $this->belongsTo(User::class, 'player_blue_id');
+    }
+
+    public function winner()
+    {
+        return $this->belongsTo(User::class, 'winner_id');
     }
 }

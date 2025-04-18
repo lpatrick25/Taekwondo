@@ -4,9 +4,6 @@
 @endsection
 @section('APP-CONTENT')
     <div class="table-responsive">
-        <div class="text-right mb-3">
-            <a href="{{ route('addKyorugi') }}" class="btn btn-md btn-primary">Add New Tournament</a>
-        </div>
         <table id="datatable-1" class="table data-table table-striped table-bordered">
             <thead>
                 <tr>
@@ -36,12 +33,8 @@
                         <td>{{ $kyorugi->status }}</td>
                         <td>
                             <button type="button" class="mt-2 btn btn-primary rounded-pill btn-with-icon" title="Edit"
-                                onclick="edit({{ $kyorugi->id }})">
-                                <i class="fa fa-edit">Edit</i>
-                            </button>
-                            <button type="button" class="mt-2 btn btn-danger rounded-pill btn-with-icon" title="Delete"
-                                onclick="remove({{ $kyorugi->id }})">
-                                <i class="fa fa-trash">Delete</i>
+                                onclick="register({{ $kyorugi->id }})">
+                                <i class="fa fa-edit">Register</i>
                             </button>
                         </td>
                     </tr>
@@ -52,28 +45,8 @@
 @endsection
 @section('APP-SCRIPT')
     <script type="text/javascript">
-        function edit(tournament_id) {
-            window.location.href = `/kyorugiTournaments/${tournament_id}`;
-        }
-
-        function remove(tournament_id) {
-            $.ajax({
-                method: 'DELETE',
-                url: `/kyorugiTournaments/${tournament_id}`,
-                dataType: 'JSON',
-                cache: false,
-                success: function(response) {
-                    showDatumAlert('success', response.message);
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
-                },
-                error: function(response) {
-                    showDatumAlert('danger', response.responseJSON?.message ||
-                        'Unexpected server error.');
-                    console.error('Full error:', response.responseJSON);
-                }
-            });
+        function register(tournament_id) {
+            window.location.href = `/coach/kyorugiPlayer/${tournament_id}`;
         }
 
         $(document).ready(function() {

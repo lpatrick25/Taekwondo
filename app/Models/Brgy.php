@@ -10,6 +10,8 @@ class Brgy extends Model
     use HasFactory;
 
     public $table = 'brgys';
+    protected $primaryKey = 'brgy_code';
+    public $incrementing = false;
 
     protected $fillable = [
         'brgy_code',
@@ -18,4 +20,19 @@ class Brgy extends Model
         'province_code',
         'municipality_code',
     ];
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class, 'region_code', 'region_code');
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class, 'province_code', 'province_code');
+    }
+
+    public function municipality()
+    {
+        return $this->belongsTo(Municipality::class, 'municipality_code', 'municipality_code');
+    }
 }

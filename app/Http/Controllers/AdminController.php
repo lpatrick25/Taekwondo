@@ -26,7 +26,7 @@ class AdminController extends Controller
 
     public function chapter()
     {
-        $chapters = Chapter::with('user')->get();
+        $chapters = Chapter::all();
         return view("admin.chapter", compact("chapters"));
     }
 

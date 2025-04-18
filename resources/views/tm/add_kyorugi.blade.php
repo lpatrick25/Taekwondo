@@ -3,6 +3,14 @@
     active
 @endsection
 @section('APP-CONTENT')
+    <div class="mb-4">
+        <button type="button" class="btn btn-md btn-primary" onclick="goBack()">Go Back</button>
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+    </div>
     <form id="addForm" class="card-content needs-validation" novalidate>
         <input type="hidden" class="form-control" name="created_by" id="created_by" value="{{ auth()->user()->id }}">
         <div class="card">

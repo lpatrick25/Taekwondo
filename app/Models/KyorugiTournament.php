@@ -35,11 +35,6 @@ class KyorugiTournament extends Model implements HasMedia
         'status' => TournamentStatus::class,
     ];
 
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(EventCategory::class, 'event_category_id');
-    }
-
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -52,6 +47,11 @@ class KyorugiTournament extends Model implements HasMedia
             ->withTimestamps();
     }
 
+    public function category()
+    {
+        return $this->belongsTo(EventCategory::class, 'event_category_id');
+    }
+
     public function province()
     {
         return $this->belongsTo(Province::class, 'province_code', 'province_code');
@@ -62,9 +62,19 @@ class KyorugiTournament extends Model implements HasMedia
         return $this->belongsTo(Municipality::class, 'municipality_code', 'municipality_code');
     }
 
-    public function brgy()
+    public function barangay()
     {
         return $this->belongsTo(Brgy::class, 'brgy_code', 'brgy_code');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function matches()
+    {
+        return $this->hasMany(KyorugiTournamentMatch::class, 'tournament_id');
     }
 
     public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void

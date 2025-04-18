@@ -23,11 +23,11 @@ return new class extends Migration
             $table->enum('gender', ['Male', 'Female']);
 
             // Participants (nullable for walkovers/byes)
-            $table->foreignId('player_red_id')->nullable()->constrained('players')->onDelete('set null');
-            $table->foreignId('player_blue_id')->nullable()->constrained('players')->onDelete('set null');
+            $table->foreignId('player_red_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('player_blue_id')->nullable()->constrained('users')->onDelete('set null');
 
             // Winner (can be red, blue, or null if not yet done)
-            $table->foreignId('winner_id')->nullable()->constrained('players')->onDelete('set null');
+            $table->foreignId('winner_id')->nullable()->constrained('users')->onDelete('set null');
 
             // Match status and metadata
             $table->string('round')->nullable(); // Example: "Quarterfinal", "Semifinal", "Final"

@@ -24,7 +24,7 @@
                     <tr>
                         <td>{{ $player->id }}</td>
                         <td>
-                            <img src="{{ $player->user->getFirstMediaUrl('avatar', 'thumb') ?: asset('assets/images/user/1.jpg') }}"
+                            <img src="{{ $player->user->getFirstMediaUrl('avatar', 'thumbnail') ?: asset('assets/images/user/1.jpg') }}"
                                 alt="Avatar" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                         </td>
                         <td>{{ $player->member_id }}</td>

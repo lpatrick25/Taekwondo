@@ -6,6 +6,7 @@ use App\Http\Controllers\CoachController;
 use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\KyorugiTournamentController;
+use App\Http\Controllers\KyorugiTournamentMatchController;
 use App\Http\Controllers\KyorugiTournamentPlayerController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\PlayerController;
@@ -73,6 +74,13 @@ Route::prefix('coach')->middleware('auth')->group(function () {
     Route::get('kyorugi', [CoachController::class, 'kyorugi'])->name('coachKyorugi');
     Route::get('kyorugiPlayer/{tournamentID}', [CoachController::class, 'kyorugiPlayer'])->name('coachKyorugiPlayer');
 
+    Route::get('coachKyorugiTournament', [CoachController::class, 'kyorugiTournament'])->name('coachKyorugiTournament');
+    Route::get('kyorugiViewPlayer/{tournamentID}', [CoachController::class, 'kyorugiViewPlayer'])->name('coachKyorugiViewPlayer');
+
+    Route::get('kyorugiMatches', [CoachController::class, 'kyorugiMatches'])->name('coachKyorugiMatches');
+    Route::get('kyorugiBracket/{tournamentID}', [CoachController::class, 'kyorugiBracket'])->name('coachKyorugiBracket');
+    Route::get('kyorugiSummary/{tournamentID}', [CoachController::class, 'kyorugiSummary'])->name('coachKyorugiSummary');
+
     Route::get('/coachProfile', [CoachController::class, 'coachProfile'])->name('coachProfile');
 });
 
@@ -103,6 +111,12 @@ Route::prefix('tm')->middleware('auth')->group(function () {
     Route::get('kyorugi', [TMController::class, 'kyorugi'])->name('tmKyorugi');
     Route::get('addKyorugi', [TMController::class, 'addKyorugi'])->name('addKyorugi');
     Route::get('kyorugiPlayer', [TMController::class, 'kyorugiPlayer'])->name('tmKyorugiPlayer');
+    Route::get('kyorugiViewPlayer/{tournamentID}', [TMController::class, 'kyorugiViewPlayer'])->name('tmKyorugiViewPlayer');
+    Route::get('kyorugiMatches', [TMController::class, 'kyorugiMatches'])->name('tmKyorugiMatches');
+    Route::get('kyorugiMatchesPlayers/{tournamentID}', [TMController::class, 'kyorugiMatchesPlayers'])->name('tmKyorugiMatchesPlayers');
+    Route::get('kyorugiBracket/{tournamentID}', [TMController::class, 'kyorugiBracket'])->name('tmKyorugiBracket');
+    Route::post('tournaments/{tournamentID}', [KyorugiTournamentMatchController::class, 'generateNextRound'])->name('generateNextRound');
+    Route::get('kyorugiSummary/{tournamentID}', [TMController::class, 'kyorugiSummary'])->name('tmKyorugiSummary');
 
     Route::get('/tmProfile', [TMController::class, 'tmProfile'])->name('tmProfile');
 });
@@ -123,3 +137,4 @@ Route::resource('players', PlayerController::class)->middleware('auth');
 Route::resource('eventCategories', EventCategoryController::class)->middleware('auth');
 Route::resource('kyorugiTournaments', KyorugiTournamentController::class)->middleware('auth');
 Route::resource('kyorugiTournamentPlayers', KyorugiTournamentPlayerController::class)->middleware('auth');
+Route::resource('kyorugiTournamentMatches', KyorugiTournamentMatchController::class)->middleware('auth');

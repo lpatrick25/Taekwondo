@@ -121,10 +121,12 @@
                 </div>
                 <div class="card-body scrollable-content">
                     <div class="row">
-                        <div class="col-12 text-right mb-2">
-                            <button class="btn btn-md btn-primary" data-toggle="modal" data-target="#addPlayer">Register
-                                Player</button>
-                        </div>
+                        @if ($tournament->status === \App\Enums\TournamentStatus::DRAFT)
+                            <div class="col-12 text-right mb-2">
+                                <button class="btn btn-md btn-primary" data-toggle="modal" data-target="#addPlayer">Register
+                                    Player</button>
+                            </div>
+                        @endif
                         @if ($registeredPlayers->isEmpty())
                             <div class="col-12 text-center alert alert-info shadow-sm rounded">
                                 <div class="py-5">
@@ -155,8 +157,10 @@
                                             </p>
                                             <a href="{{ url('/coach/viewPlayer/' . $registered->player->id) }}"
                                                 class="btn btn-outline-primary btn-sm mb-2">View Profile</a>
-                                            <button class="btn btn-outline-danger btn-sm"
-                                                onclick="removePlayer({{ $registered->id }})">Remove Player</button>
+                                            @if ($tournament->status === \App\Enums\TournamentStatus::DRAFT)
+                                                <button class="btn btn-outline-danger btn-sm"
+                                                    onclick="removePlayer({{ $registered->id }})">Remove Player</button>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

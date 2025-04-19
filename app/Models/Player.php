@@ -38,12 +38,12 @@ class Player extends Model
         'religion' => Religion::class,
     ];
 
-    public function tournaments()
-    {
-        return $this->belongsToMany(KyorugiTournament::class, 'kyorugi_tournament_player', 'player_id', 'tournament_id')
-            ->withPivot(['weight_class', 'belt_level', 'status', 'registered_by'])
-            ->withTimestamps();
-    }
+    // public function tournaments()
+    // {
+    //     return $this->belongsToMany(KyorugiTournament::class, 'kyorugi_tournament_player', 'player_id', 'tournament_id')
+    //         ->withPivot(['weight_class', 'belt_level', 'status', 'registered_by'])
+    //         ->withTimestamps();
+    // }
 
     public function user()
     {
@@ -75,8 +75,18 @@ class Player extends Model
         return $this->belongsTo(Brgy::class, 'brgy_code', 'brgy_code');
     }
 
-    // public function tournaments()
-    // {
-    //     return $this->hasMany(KyorugiTournamentPlayer::class);
-    // }
+    public function redMatches()
+    {
+        return $this->hasMany(KyorugiTournamentMatch::class, 'player_red_id');
+    }
+
+    public function blueMatches()
+    {
+        return $this->hasMany(KyorugiTournamentMatch::class, 'player_blue_id');
+    }
+
+    public function tournaments()
+    {
+        return $this->hasMany(KyorugiTournamentPlayer::class);
+    }
 }

@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\BeltLevel;
+use App\Enums\Division;
 use App\Enums\MatchStatus;
+use App\Enums\WeightCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,33 +16,29 @@ class KyorugiTournamentMatch extends Model
 
     protected $fillable = [
         'tournament_id',
-        'match_number',
-        'player1_id',
-        'player2_id',
-        'match_status',
+        'division',
+        'weight_class',
+        'belt_level',
+        'gender',
+        'player_red_id',
+        'player_blue_id',
         'winner_id',
-        'loser_id',
-        'created_by',
+        'round',
+        'match_status',
+        'match_datetime',
     ];
 
     protected $casts = [
         'match_status' => MatchStatus::class,
+        'division' => Division::class,
+        'weight_class' => WeightCategory::class,
+        'belt_level' => BeltLevel::class,
     ];
 
-    protected $with = [
-        'player1',
-        'player2',
-    ];
-
-    public function player1(): BelongsTo
-    {
-        return $this->belongsTo(Player::class, 'player1_id');
-    }
-
-    public function player2(): BelongsTo
-    {
-        return $this->belongsTo(Player::class, 'player2_id');
-    }
+    // protected $with = [
+    //     'player_red_id',
+    //     'player_blue_id',
+    // ];
 
     public function loser(): BelongsTo
     {
@@ -69,5 +68,26 @@ class KyorugiTournamentMatch extends Model
     public function winner()
     {
         return $this->belongsTo(User::class, 'winner_id');
+    }
+
+    public function getIsByeAttribute(): bool
+    {
+        return is_null($this->player_blue_id) || is_null($this->bluePlayer);
+    }
+
+
+    public function getGroupKey(): string
+    {
+        return implode('-', [
+            $this->division->value,
+            $this->weight_class->value,
+            $this->belt_level->value,
+            $this->gender,
+        ]);
+    }
+
+    public function scopeByRound($query, int $round)
+    {
+        return $query->where('round', $round);
     }
 }

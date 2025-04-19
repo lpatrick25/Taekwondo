@@ -44,4 +44,18 @@ class KyorugiTournamentPlayer extends Model
     {
         return $this->belongsTo(User::class, 'registered_by');
     }
+
+    public function getGroupKey(): string
+    {
+        return implode('-', [
+            $this->division->value,
+            $this->weight_class->value,
+            $this->belt_level->value,
+            $this->gender,
+        ]);
+    }
+    public function scopeGroupedByAttributes($query)
+    {
+        return $query->get()->groupBy(fn($player) => $player->getGroupKey());
+    }
 }

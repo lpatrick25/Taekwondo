@@ -8,7 +8,7 @@ trait HasFullName
     {
         $parts = [
             $this->first_name,
-            $this->middle_name,
+            $this->middle_name ? $this->middle_name[0] . '.' : null, // Use first letter of middle name if exists
             $this->last_name,
             $this->extension_name,
         ];

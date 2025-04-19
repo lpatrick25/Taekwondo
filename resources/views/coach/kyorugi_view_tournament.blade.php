@@ -4,15 +4,13 @@
 @endsection
 @section('APP-CONTENT')
     <div class="table-responsive">
-        <div class="text-right mb-3">
-            <a href="{{ route('addKyorugi') }}" class="btn btn-md btn-primary">Add New Tournament</a>
-        </div>
         <table id="datatable-1" class="table data-table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Avatar</th>
                     <th>Player Name</th>
+                    <th>Chapter Name</th>
                     <th>Belt Level</th>
                     <th>Gender</th>
                     <th>Division</th>
@@ -29,6 +27,7 @@
                                 alt="Avatar" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                         </td>
                         <td>{{ $kyorugi->player->full_name }}</td>
+                        <td>{{ $kyorugi->registeredBy->chapter->chapter_name }}</td>
                         <td>{{ $kyorugi->player->player->belt_level }}</td>
                         <td>{{ $kyorugi->player->player->gender }}</td>
                         <td>{{ $kyorugi->division }}</td>
@@ -44,15 +43,4 @@
             </tbody>
         </table>
     </div>
-@endsection
-@section('APP-SCRIPT')
-    <script type="text/javascript">
-        function view(player_id) {
-            window.location.href = `/tm/viewPlayer/${player_id}`;
-        }
-
-        $(document).ready(function() {
-
-        });
-    </script>
 @endsection

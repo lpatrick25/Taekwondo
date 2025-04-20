@@ -84,8 +84,9 @@
                 @php $divisionSlug = Str::slug($division); @endphp
                 <div class="accordion-item division-block" data-division="{{ $divisionSlug }}">
                     <h2 class="accordion-header" id="heading-{{ $loop->index }}">
-                        <button class="accordion-button bg-gradient-primary text-white fw-bold {{ $loop->first ? '' : 'collapsed' }}" type="button"
-                            data-toggle="collapse" data-target="#collapse-{{ $loop->index }}"
+                        <button
+                            class="accordion-button bg-gradient-primary text-white fw-bold {{ $loop->first ? '' : 'collapsed' }}"
+                            type="button" data-toggle="collapse" data-target="#collapse-{{ $loop->index }}"
                             aria-expanded="{{ $loop->first ? 'true' : 'false' }}"
                             aria-controls="collapse-{{ $loop->index }}">
                             <i class="bi bi-diagram-3-fill me-2"></i> Division: {{ $division }}
@@ -104,7 +105,6 @@
                                             @if ($player)
                                                 <div class="col-lg-4 col-md-6 mb-3">
                                                     <div class="card player-card h-100" data-toggle="modal"
-                                                        data-target="#playerModal"
                                                         data-name="{{ $player->user->full_name }}"
                                                         data-chapter="{{ $player->chapter->chapter_name ?? 'N/A' }}"
                                                         data-coach="{{ $player->coach->full_name ?? 'N/A' }}"
@@ -116,7 +116,8 @@
                                                         <img class="card-img-top"
                                                             src="{{ $player->user->getFirstMediaUrl('avatar', 'thumbnail') ?: asset('assets/images/user/1.jpg') }}"
                                                             alt="Player Avatar">
-                                                        <div class="card-body">
+                                                        <div data-target="#playerModal" data-toggle="modal"
+                                                            class="card-body">
                                                             <h5 class="card-title text-primary">
                                                                 {{ $player->user->full_name }}
                                                             </h5>
@@ -126,10 +127,18 @@
                                                             </p>
                                                         </div>
                                                         <div class="card-footer d-flex justify-content-between">
-                                                            <span
-                                                                class="badge bg-secondary badge-custom">{{ $player->gender }}</span>
-                                                            <span
-                                                                class="badge bg-secondary badge-custom">{{ $player->civil_status->value ?? 'N/A' }}</span>
+                                                            <div class="text-left">
+                                                                <span
+                                                                    class="badge bg-secondary badge-custom">{{ $player->gender }}</span>
+                                                                <span
+                                                                    class="badge bg-secondary badge-custom">{{ $player->civil_status->value ?? 'N/A' }}</span>
+                                                            </div>
+                                                            <div class="text-right">
+                                                                <button type="button" class="btn btn-primary btn-sm"
+                                                                    onclick="viewMatches('{{ $player->user->id }}')">
+                                                                    <i class="bi bi-eye"></i> Matches
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -169,10 +178,39 @@
             </div>
         </div>
     </div>
+    {{-- Player Performant Modal --}}
+    <div class="modal fade" id="playerPerformanceModal" tabindex="-1" aria-labelledby="playerPerformanceModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-body" id="performanceContent">
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
 @section('APP-SCRIPT')
     <script>
+        function viewMatches(playerId) {
+            $('#performanceContent').html('<p>Loading performance data...</p>');
+            $.ajax({
+                url: `/players/${playerId}/performance/export-pdf`,
+                type: "GET",
+                dataType: "html",
+                cache: false,
+                success: function(response) {
+                    $('#performanceContent').html(response);
+                    $('#playerPerformanceModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    $('#performanceContent').html(
+                        '<p class="text-danger">Failed to load player performance.</p>');
+                    console.error("Error fetching matches:", error);
+                }
+            });
+        }
+
         // Filter Division
         document.getElementById('divisionFilter').addEventListener('change', function() {
             let value = this.value;

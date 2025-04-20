@@ -180,6 +180,11 @@ class KyorugiTournamentMatchController extends Controller
             }
 
             if ($createdMatchCount === 0) {
+                $tournament = KyorugiTournament::findOrFail($tournamentId);
+                $tournament->update([
+                    'status' => TournamentStatus::FINISHED,
+                ]);
+                $tournament->save();
                 return $this->success([], 'Matches are already concluded. No next round generated.', 200);
             }
 

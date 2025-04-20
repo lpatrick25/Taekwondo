@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('kyorugiMatches')
+@section('kyorugiReport')
     active
 @endsection
 @section('APP-CONTENT')

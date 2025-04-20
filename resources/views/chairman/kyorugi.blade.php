@@ -16,7 +16,6 @@
                     <th>Venue</th>
                     <th>Address</th>
                     <th>Status</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,12 +30,6 @@
                         <td>{{ $kyorugi->venue_name }}</td>
                         <td>{{ $kyorugi->full_address }}</td>
                         <td>{{ $kyorugi->status }}</td>
-                        <td>
-                            <button type="button" class="mt-2 btn btn-primary rounded-pill btn-with-icon" title="Edit"
-                                onclick="register({{ $kyorugi->id }})">
-                                <i class="fa fa-edit">View</i>
-                            </button>
-                        </td>
                     </tr>
                 @endforeach
             </tbody>

@@ -28,9 +28,9 @@
             @foreach ($matches as $m)
                 <tr>
                     <td>#{{ $m->id }}</td>
-                    <td>{{ $m->playerRed->name ?? 'TBD' }}</td>
-                    <td>{{ $m->playerBlue->name ?? 'TBD' }}</td>
-                    <td>{{ $m->winner->name ?? 'TBD' }}</td>
+                    <td>{{ $m->redPlayer->full_name ?? 'TBD' }}</td>
+                    <td>{{ $m->bluePlayer->full_name ?? 'TBD' }}</td>
+                    <td>{{ $m->winner->full_name ?? 'TBD' }}</td>
                     <td>{{ $m->match_status }}</td>
                     <td>{{ $m->round }}</td>
                 </tr>

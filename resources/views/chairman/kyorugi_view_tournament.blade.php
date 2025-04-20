@@ -47,7 +47,7 @@
 @section('APP-SCRIPT')
     <script type="text/javascript">
         function view(playerID) {
-            window.location.href = `/coach/viewPlayer/${playerID}`;
+            window.location.href = `/chairman/viewPlayer/${playerID}`;
         }
 
         $(document).ready(function() {

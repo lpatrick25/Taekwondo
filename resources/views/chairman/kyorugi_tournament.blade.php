@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('kyorugi')
+@section('kyorugiPlayer')
     active
 @endsection
 @section('APP-CONTENT')
@@ -11,8 +11,6 @@
                     <th>Name</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Registration Start</th>
-                    <th>Registration End</th>
                     <th>Venue</th>
                     <th>Address</th>
                     <th>Status</th>
@@ -26,14 +24,12 @@
                         <td>{{ $kyorugi->name }}</td>
                         <td>{{ date('F j, Y', strtotime($kyorugi->start_date)) }}</td>
                         <td>{{ date('F j, Y', strtotime($kyorugi->end_date)) }}</td>
-                        <td>{{ date('F j, Y', strtotime($kyorugi->registration_start)) }}</td>
-                        <td>{{ date('F j, Y', strtotime($kyorugi->registration_end)) }}</td>
                         <td>{{ $kyorugi->venue_name }}</td>
                         <td>{{ $kyorugi->full_address }}</td>
                         <td>{{ $kyorugi->status }}</td>
                         <td>
-                            <button type="button" class="mt-2 btn btn-primary rounded-pill btn-with-icon" title="Edit"
-                                onclick="register({{ $kyorugi->id }})">
+                            <button type="button" class="mt-2 btn btn-primary rounded-pill btn-with-icon" title="View"
+                                onclick="view({{ $kyorugi->id }})">
                                 <i class="fa fa-edit">View</i>
                             </button>
                         </td>
@@ -45,8 +41,8 @@
 @endsection
 @section('APP-SCRIPT')
     <script type="text/javascript">
-        function register(tournament_id) {
-            window.location.href = `/coach/kyorugiPlayer/${tournament_id}`;
+        function view(tournament_id) {
+            window.location.href = `/chairman/kyorugiViewPlayer/${tournament_id}`;
         }
 
         $(document).ready(function() {

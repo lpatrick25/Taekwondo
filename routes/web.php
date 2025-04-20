@@ -8,6 +8,7 @@ use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\KyorugiTournamentController;
 use App\Http\Controllers\KyorugiTournamentMatchController;
 use App\Http\Controllers\KyorugiTournamentPlayerController;
+use App\Http\Controllers\Navigation\ChairmanController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\Report\KyorugiReportController;
@@ -124,6 +125,30 @@ Route::prefix('tm')->middleware('auth')->group(function () {
     Route::get('kyorugiReport', [TMController::class, 'kyorugiReport'])->name('tmKyorugiReport');
 
     Route::get('/tmProfile', [TMController::class, 'tmProfile'])->name('tmProfile');
+});
+
+Route::prefix('chairman')->middleware('auth')->group(function () {
+    Route::get('dashboard', [ChairmanController::class, 'dashboard'])->name('chairmanDashboard');
+
+    // Player
+    Route::get('player', [ChairmanController::class, 'player'])->name('chairmanPlayer');
+    Route::get('viewPlayer/{playerID}', [ChairmanController::class, 'viewPlayer'])->name('chairmanViewPlayer');
+
+    Route::get('chapter', [ChairmanController::class, 'chapter'])->name('chairmanChapter');
+    Route::get('viewChapter/{chapterID}', [ChairmanController::class, 'vieWChapter'])->name('chairmanViewChapter');
+
+    // Kyorugi
+    Route::get('kyorugi', [ChairmanController::class, 'kyorugi'])->name('chairmanKyorugi');
+    Route::get('kyorugiPlayer/{tournamentID}', [ChairmanController::class, 'kyorugiPlayer'])->name('chairmanKyorugiPlayer');
+
+    Route::get('kyorugiTournament', [ChairmanController::class, 'kyorugiTournament'])->name('chairmanKyorugiTournament');
+    Route::get('kyorugiViewPlayer/{tournamentID}', [ChairmanController::class, 'kyorugiViewPlayer'])->name('chairmanKyorugiViewPlayer');
+
+    Route::get('kyorugiMatches', [ChairmanController::class, 'kyorugiMatches'])->name('chairmanKyorugiMatches');
+    Route::get('kyorugiBracket/{tournamentID}', [ChairmanController::class, 'kyorugiBracket'])->name('chairmanKyorugiBracket');
+    Route::get('kyorugiSummary/{tournamentID}', [ChairmanController::class, 'kyorugiSummary'])->name('chairmanKyorugiSummary');
+
+    Route::get('/chairmanProfile', [ChairmanController::class, 'chairmanProfile'])->name('chairmanProfile');
 });
 
 Route::get('/get-municipalities/{provinceCode}', function ($provinceCode) {

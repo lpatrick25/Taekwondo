@@ -1,73 +1,87 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Navigation;
 
 use App\Enums\TournamentStatus;
+use App\Http\Controllers\Controller;
 use App\Models\Chapter;
-use App\Models\EventCategory;
 use App\Models\KyorugiTournament;
 use App\Models\KyorugiTournamentMatch;
 use App\Models\KyorugiTournamentPlayer;
 use App\Models\Player;
-use App\Models\Province;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class TMController extends Controller
+class ChairmanController extends Controller
 {
     public function dashboard()
     {
-        return view("tm.dashboard");
+        return view("chairman.dashboard");
     }
 
     public function chapter()
     {
         $chapters = Chapter::all();
-        return view("tm.chapter", compact("chapters"));
+        return view("chairman.chapter", compact("chapters"));
     }
 
     public function viewChapter(int $chapterID)
     {
         $chapter = Chapter::findOrFail($chapterID);
-        return view("tm.chapter_view", compact("chapter"));
+        return view("chairman.chapter_view", compact("chapter"));
     }
 
     public function player()
     {
         $players = Player::with(['user', 'chapter'])->get();
 
-        return view('tm.player', compact('players'));
+        return view('chairman.player', compact('players'));
     }
 
     public function viewPlayer($playerID)
     {
         $player = Player::with('user')->findOrFail($playerID);
-        return view('tm.player_view', compact('player'));
-    }
-
-    public function category()
-    {
-        $eventCategories = EventCategory::all();
-        return view('tm.category', compact('eventCategories'));
+        return view('chairman.player_view', compact('player'));
     }
 
     public function kyorugi()
     {
-        $kyorugis = KyorugiTournament::all();
-        return view('tm.kyorugi', compact('kyorugis'));
+        $kyorugis = KyorugiTournament::where('status', '!=', TournamentStatus::DRAFT)->get();
+        return view('chairman.kyorugi', compact('kyorugis'));
     }
 
-    public function addKyorugi()
+    public function kyorugiPlayer($tournament_id)
     {
-        $eventCategories = EventCategory::all();
-        $provinces = Province::where('region_code', 8)->get();
+        $coachId = auth()->id();
 
-        return view('tm.add_kyorugi', compact('provinces', 'eventCategories'));
+        // Get all player IDs under this coach
+        $playerIds = Player::where('coach_id', $coachId)->pluck('user_id');
+
+        // Get IDs of players already registered to this tournament
+        $registeredPlayerIds = DB::table('kyorugi_tournament_player')
+            ->where('tournament_id', $tournament_id)
+            ->pluck('player_id')
+            ->toArray();
+
+        // Get players of this coach NOT in the registered list
+        $unregisteredPlayers = Player::where('coach_id', $coachId)
+            ->whereNotIn('user_id', $registeredPlayerIds)
+            ->get();
+
+        // Optionally still load the tournament for other data
+        $tournament = KyorugiTournament::findOrFail($tournament_id);
+
+        $registeredPlayers = KyorugiTournamentPlayer::with(['tournament', 'player'])
+            ->whereIn('player_id', $playerIds)
+            ->get();
+
+        return view('chairman.kyorugi_player', compact('tournament', 'unregisteredPlayers', 'registeredPlayers'));
     }
 
-    public function kyorugiPlayer()
+    public function kyorugiTournament()
     {
         $kyorugis = KyorugiTournament::where('status', '!=', TournamentStatus::DRAFT)->get();
-        return view('kyorugi.kyorugi_player', compact('kyorugis'));
+        return view('chairman.kyorugi_tournament', compact('kyorugis'));
     }
 
     public function kyorugiViewPlayer($tournamentID)
@@ -75,8 +89,7 @@ class TMController extends Controller
         $kyorugis = KyorugiTournamentPlayer::where('tournament_id', $tournamentID)
             ->orderBy('created_at', 'desc')
             ->get();
-        $hasMatches = KyorugiTournamentMatch::where('tournament_id', $tournamentID)->first();
-        return view('kyorugi.kyorugi_view_player', compact('kyorugis', 'tournamentID', 'hasMatches'));
+        return view('chairman.kyorugi_view_tournament', compact('kyorugis'));
     }
 
     public function kyorugiMatches()
@@ -105,13 +118,7 @@ class TMController extends Controller
             }
         }
 
-        return view('kyorugi.kyorugi_matches', compact('kyorugis', 'roundsByTournament', 'showSummaryButton'));
-    }
-
-    public function kyorugiMatchesPlayers($tournamentID)
-    {
-        $kyorugis = KyorugiTournamentMatch::where('tournament_id', $tournamentID)->get();
-        return view('kyorugi.kyorugi_matches_players', compact('kyorugis'));
+        return view('chairman.kyorugi_matches', compact('kyorugis', 'roundsByTournament', 'showSummaryButton'));
     }
 
     public function kyorugiBracket(Request $request, $tournamentID)
@@ -127,21 +134,6 @@ class TMController extends Controller
 
         $matchesCollection = $matchesQuery->get();
 
-        // Check if all matches in this round are completed
-        $allCompleted = $round !== null
-            ? $matchesCollection->every(fn($match) => $match->match_status === \App\Enums\MatchStatus::COMPLETED)
-            : false;
-
-        // Check if next round already exists
-        $nextRoundExists = false;
-        if ($round !== null) {
-            $nextRoundExists = KyorugiTournamentMatch::where('tournament_id', $tournamentID)
-                ->where('round', $round + 1)
-                ->exists();
-        }
-
-        $canGenerateNextRound = $allCompleted && !$nextRoundExists;
-
         // Grouping matches for view
         $matches = $matchesCollection
             ->groupBy(fn($match) => $match->division->value)
@@ -151,11 +143,9 @@ class TMController extends Controller
                     ->map(fn($weightMatches) => $weightMatches->groupBy('round'))
             );
 
-        return view('kyorugi.bracket', [
+        return view('chairman.bracket', [
             'matches' => $matches,
             'tournament' => KyorugiTournament::findOrFail($tournamentID),
-            'selectedRound' => $round,
-            'canGenerateNextRound' => $canGenerateNextRound,
         ]);
     }
 
@@ -186,16 +176,10 @@ class TMController extends Controller
                     });
             });
 
-        return view('kyorugi.summary', compact('tournament', 'winners'));
+        return view('chairman.summary', compact('tournament', 'winners'));
     }
 
-    public function kyorugiReport()
-    {
-        $kyorugis = KyorugiTournament::where('status', '!=', TournamentStatus::DRAFT)->get();
-        return view('kyorugi.report', compact('kyorugis'));
-    }
-
-    public function tmProfile()
+    public function chairmanProfile()
     {
         $committee = auth()->user()->committee;
 
@@ -203,6 +187,6 @@ class TMController extends Controller
             abort(404, 'Committee not found.');
         }
 
-        return view('tm.profile', compact('committee'));
+        return view('chairman.profile', compact('committee'));
     }
 }

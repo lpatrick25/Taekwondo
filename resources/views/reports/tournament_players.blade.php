@@ -17,7 +17,7 @@
                 <th>Belt</th>
                 <th>Gender</th>
                 <th>Status</th>
-                <th>Registered By</th>
+                <th>Coach</th>
                 <th>Chapter</th>
             </tr>
         </thead>

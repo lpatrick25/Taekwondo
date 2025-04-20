@@ -18,9 +18,15 @@ class KyorugiReportController extends Controller
             ->when($request->weight_class, fn($q) => $q->where('weight_class', $request->weight_class))
             ->when($request->belt_level, fn($q) => $q->where('belt_level', $request->belt_level))
             ->when($request->gender, fn($q) => $q->where('gender', $request->gender))
-            ->get();
+            ->get()
+            ->sortBy([
+                ['division', 'asc'],
+                ['weight_class', 'asc'],
+                ['belt_level', 'asc'],
+                ['gender', 'asc'],
+                [fn($p) => $p->player->full_name ?? '', 'asc']
+            ]);
 
-        // return view('reports.tournament_players', compact('players', 'tournamentId'));
         $pdf = Pdf::loadView('reports.tournament_players', compact('players', 'tournamentId'));
         return $pdf->download("tournament_players_{$tournamentId}.pdf");
     }
@@ -55,15 +61,17 @@ class KyorugiReportController extends Controller
         $matches = KyorugiTournamentMatch::where(function ($q) use ($playerId) {
             $q->where('player_red_id', $playerId)
                 ->orWhere('player_blue_id', $playerId);
-        })
-            ->with(['redPlayer:id,name', 'bluePlayer:id,name', 'winner:id,name'])
-            ->get();
+        })->get();
 
         $wins = $matches->where('winner_id', $playerId)->count();
         $total = $matches->count();
         $player = User::find($playerId);
 
-        $pdf = Pdf::loadView('reports.player_performance', compact('matches', 'wins', 'total', 'player'));
+        if (request()->wantsJson() || request()->ajax()) {
+            return view('reports.player_performance', compact('matches', 'wins', 'total', 'player', 'playerId'))->render();
+        }
+
+        $pdf = Pdf::loadView('reports.player_performance', compact('matches', 'wins', 'total', 'player', 'playerId'));
         return $pdf->download("player_{$playerId}_performance.pdf");
     }
 

@@ -107,7 +107,7 @@ class CoachController extends Controller
 
     public function kyorugiMatches()
     {
-        $kyorugis = KyorugiTournament::where('status', TournamentStatus::ONGOING)->get();
+        $kyorugis = KyorugiTournament::where('status', '!=', TournamentStatus::DRAFT)->get();
 
         $roundsByTournament = KyorugiTournamentMatch::select('tournament_id', 'round')
             ->distinct()

@@ -52,6 +52,10 @@
 @endsection
 @section('APP-SCRIPT')
     <script type="text/javascript">
+        function view(player_id) {
+            window.location.href = `/tm/viewPlayer/${player_id}`;
+        }
+
         function generateMatch(tournamentID) {
             $.ajax({
                 method: 'POST',

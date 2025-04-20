@@ -189,6 +189,12 @@ class TMController extends Controller
         return view('kyorugi.summary', compact('tournament', 'winners'));
     }
 
+    public function kyorugiReport()
+    {
+        $kyorugis = KyorugiTournament::where('status', '!=', TournamentStatus::DRAFT)->get();
+        return view('kyorugi.report', compact('kyorugis'));
+    }
+
     public function tmProfile()
     {
         $committee = auth()->user()->committee;

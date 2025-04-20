@@ -10,6 +10,8 @@ use App\Http\Controllers\KyorugiTournamentMatchController;
 use App\Http\Controllers\KyorugiTournamentPlayerController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\Report\KyorugiReportController;
+use App\Http\Controllers\Report\PomsaeReportController;
 use App\Http\Controllers\SigninController;
 use App\Http\Controllers\TMController;
 use App\Models\Brgy;
@@ -118,6 +120,9 @@ Route::prefix('tm')->middleware('auth')->group(function () {
     Route::post('tournaments/{tournamentID}', [KyorugiTournamentMatchController::class, 'generateNextRound'])->name('generateNextRound');
     Route::get('kyorugiSummary/{tournamentID}', [TMController::class, 'kyorugiSummary'])->name('tmKyorugiSummary');
 
+    // Report
+    Route::get('kyorugiReport', [TMController::class, 'kyorugiReport'])->name('tmKyorugiReport');
+
     Route::get('/tmProfile', [TMController::class, 'tmProfile'])->name('tmProfile');
 });
 
@@ -138,3 +143,19 @@ Route::resource('eventCategories', EventCategoryController::class)->middleware('
 Route::resource('kyorugiTournaments', KyorugiTournamentController::class)->middleware('auth');
 Route::resource('kyorugiTournamentPlayers', KyorugiTournamentPlayerController::class)->middleware('auth');
 Route::resource('kyorugiTournamentMatches', KyorugiTournamentMatchController::class)->middleware('auth');
+
+Route::prefix('tournaments/{tournamentId}')->group(function () {
+    Route::get('players/export-pdf', [KyorugiReportController::class, 'exportTournamentPlayersPDF']);
+    Route::get('matches/schedule/export-pdf', [KyorugiReportController::class, 'exportMatchSchedulePDF']);
+    Route::get('matches/results/export-pdf', [KyorugiReportController::class, 'exportMatchResultsPDF']);
+    Route::get('division-summary/export-pdf', [KyorugiReportController::class, 'exportDivisionSummaryPDF']);
+    Route::get('no-shows/export-pdf', [KyorugiReportController::class, 'exportNoShowMatchesPDF']);
+});
+
+Route::prefix('pomsae-tournaments/{tournamentId}')->group(function () {
+    Route::get('matches/results/export-pdf', [PomsaeReportController::class, 'exportMatchResultsPDF']);
+    Route::get('players/export-pdf', [PomsaeReportController::class, 'exportParticipantListPDF']);
+    Route::get('division-summary/export-pdf', [PomsaeReportController::class, 'exportDivisionSummaryPDF']);
+});
+
+Route::get('players/{playerId}/performance/export-pdf', [KyorugiReportController::class, 'exportPlayerPerformancePDF']);

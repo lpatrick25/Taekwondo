@@ -16,13 +16,13 @@ class CoachController extends Controller
 {
     public function dashboard()
     {
-        return view('coach.dashboard');
+        $chapter = auth()->user()->chapter;
+        return view('coach.dashboard', compact('chapter'));
     }
 
     public function player()
     {
-        $players = auth()->user()->chapter->players;
-
+        $players = auth()->user()->chapter->players ?? [];
         return view('coach.player', compact('players'));
     }
 
@@ -43,6 +43,9 @@ class CoachController extends Controller
     public function chapter()
     {
         $chapter = Chapter::where('coach_id', auth()->user()->id)->first();
+        if ($chapter === null) {
+            return redirect()->back()->withErrors(['error' => 'You do not have a chapter assigned.']);
+        }
         return view('coach.chapter', compact('chapter'));
     }
 
@@ -86,6 +89,7 @@ class CoachController extends Controller
 
         $registeredPlayers = KyorugiTournamentPlayer::with(['tournament', 'player'])
             ->whereIn('player_id', $playerIds)
+            ->where('tournament_id', $tournament_id)
             ->get();
 
         return view('coach.kyorugi_player', compact('tournament', 'unregisteredPlayers', 'registeredPlayers'));

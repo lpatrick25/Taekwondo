@@ -13,7 +13,7 @@
     </div>
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h4 class="card-title mb-0">Coach Profile</h4>
+            <h4 class="card-title mb-0">Chairman Profile</h4>
         </div>
         <div class="card-body">
             <!-- Profile Image -->

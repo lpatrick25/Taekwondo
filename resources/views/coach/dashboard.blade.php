@@ -1,19 +1,41 @@
+<!-- Blade Template (resources/views/coach/dashboard.blade.php) -->
 @extends('layout.master')
+
+@section('APP-TITLE')
+    Dashboard | Coach
+@endsection
+
+@section('APP-CSS')
+    <style>
+        .radio {
+            margin-right: 15px;
+        }
+    </style>
+@endsection
+
 @section('APP-CONTENT')
-    <div class="radio d-inline-block mr-2">
-        <input type="radio" name="bsradio" id="radio1" checked="">
-        <label for="radio1">Active</label>
-    </div>
-    <div class="radio d-inline-block mr-2">
-        <input type="radio" name="bsradio" id="radio2">
-        <label for="radio2">Inactive</label>
-    </div>
-    <div class="radio d-inline-block mr-2">
-        <input type="radio" name="bsradio1" id="radio3" disabled="" checked="">
-        <label for="radio3">Active - Disabled</label>
-    </div>
-    <div class="radio d-inline-block mr-2">
-        <input type="radio" name="bsradio1" id="radio4" disabled="">
-        <label for="radio3">Inactive - Disabled</label>
-    </div>
+    <h1>Coach Dashboard</h1>
+    <!-- Add your dashboard content here -->
+@endsection
+
+@section('APP-SCRIPT')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            var chapter = "{{ $chapter ?? '' }}";
+
+            if (!chapter) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'No Chapter Assigned',
+                    text: 'You need to select a chapter to proceed.',
+                    confirmButtonText: 'Logout',
+                    allowOutsideClick: false,
+                    preConfirm: () => {
+                        window.location.href = "{{ route('signout') }}";
+                    }
+                });
+            }
+        });
+    </script>
 @endsection

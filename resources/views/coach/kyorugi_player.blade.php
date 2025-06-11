@@ -121,12 +121,11 @@
                 </div>
                 <div class="card-body scrollable-content">
                     <div class="row">
-                        @if ($tournament->status === \App\Enums\TournamentStatus::DRAFT)
-                            <div class="col-12 text-right mb-2">
-                                <button class="btn btn-md btn-primary" data-toggle="modal" data-target="#addPlayer">Register
-                                    Player</button>
-                            </div>
-                        @endif
+                        @if ($tournament->status === \App\Enums\TournamentStatus::OPEN && date('Y-m-d') <= date('Y-m-d', strtotime($tournament->registration_end)))
+    <div class="col-12 text-right mb-2">
+        <button class="btn btn-md btn-primary" data-toggle="modal" data-target="#addPlayer">Register Player</button>
+    </div>
+@endif
                         @if ($registeredPlayers->isEmpty())
                             <div class="col-12 text-center alert alert-info shadow-sm rounded">
                                 <div class="py-5">

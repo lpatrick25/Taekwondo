@@ -148,15 +148,10 @@
                         <label for="user_type">User Types:</label>
                         <select class="form-control choicesjs" name="user_type" id="user_type">
                             @foreach (\App\Enums\UserType::cases() as $user)
-                                @php
-                                    if (
-                                        $user->value === \App\Enums\UserType::PLAYER ||
-                                        $user->value === \App\Enums\UserType::ADMIN
-                                    ) {
-                                        continue;
-                                    }
-                                @endphp
-                                <option value="{{ $user->value }}">{{ ucwords($user->value) }}</option>
+                                @if ($user->value !== 'Player' && $user->value !== 'Admin')
+                                    <option value="{{ $user->value }}" selected>{{ ucwords($user->value) }}
+                                    </option>
+                                @endif
                             @endforeach
                         </select>
                         <div class="invalid-feedback">Please select a user types.</div>

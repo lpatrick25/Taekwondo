@@ -131,7 +131,8 @@
                             <div class="col-12 text-center alert alert-info shadow-sm rounded">
                                 <div class="py-5">
                                     <h4 class="mb-3 font-weight-bold text-primary">No Players Found</h4>
-                                    <p class="mb-4 text-muted">It seems there are no players registered in this chapter yet. Please check back later or add new players to this chapter.</p>
+                                    <p class="mb-4 text-muted">It seems there are no players registered in this chapter yet.
+                                        Please check back later or add new players to this chapter.</p>
                                 </div>
                             </div>
                         @else
@@ -147,7 +148,8 @@
                                             </div>
                                         </div>
                                         <div class="card-body text-center">
-                                            <h5 class="card-title font-weight-bold mb-2">{{ $player->user->full_name }}</h5>
+                                            <h5 class="card-title font-weight-bold mb-2">{{ $player->user->full_name }}
+                                            </h5>
                                             <a href="{{ url('/coach/viewPlayer/' . $player->id) }}"
                                                 class="btn btn-outline-primary btn-sm">View Profile</a>
                                         </div>
